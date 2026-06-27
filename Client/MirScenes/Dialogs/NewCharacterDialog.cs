@@ -10,7 +10,6 @@ namespace Client.MirScenes.Dialogs
         private static readonly Regex Reg = new Regex(@"^[A-Za-z0-9]|[\u4e00-\u9fa5]{" + Globals.MinCharacterNameLength + "," + Globals.MaxCharacterNameLength + "}$");
 
         public MirImageControl TitleLabel;
-        public MirLabel TitleTextLabel;
         public MirAnimatedControl CharacterDisplay;
 
         public MirButton OKButton,
@@ -59,17 +58,6 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
             };
 
-            TitleTextLabel = new MirLabel
-            {
-                AutoSize = false,
-                DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
-                Font = new Font(Settings.FontName, 10F, FontStyle.Bold),
-                Location = TitleLabel.Location,
-                Parent = this,
-                Size = TitleLabel.Size,
-                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.TitleCreateCharacter)
-            };
-
             CancelButton = new MirButton
             {
                 HoverIndex = 281,
@@ -77,9 +65,7 @@ namespace Client.MirScenes.Dialogs
                 Library = Libraries.Title,
                 Location = new Point(425, 425),
                 Parent = this,
-                PressedIndex = 282,
-                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonCancel),
-                CenterText = true
+                PressedIndex = 282
             };
             CancelButton.Click += (o, e) => Hide();
 
@@ -92,8 +78,6 @@ namespace Client.MirScenes.Dialogs
                 Location = new Point(160, 425),
                 Parent = this,
                 PressedIndex = 362,
-                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonCreate),
-                CenterText = true
             };
             OKButton.Click += (o, e) => CreateCharacter();
 
@@ -135,8 +119,6 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 PressedIndex = 2428,
                 Sound = SoundList.ButtonA,
-                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.Warrior),
-                CenterText = true
             };
             WarriorButton.Click += (o, e) =>
             {
@@ -154,8 +136,6 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 PressedIndex = 2431,
                 Sound = SoundList.ButtonA,
-                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.Wizard),
-                CenterText = true
             };
             WizardButton.Click += (o, e) =>
             {
@@ -173,8 +153,6 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 PressedIndex = 2434,
                 Sound = SoundList.ButtonA,
-                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.Taoist),
-                CenterText = true
             };
             TaoistButton.Click += (o, e) =>
             {
@@ -191,8 +169,6 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 PressedIndex = 2437,
                 Sound = SoundList.ButtonA,
-                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.Assassin),
-                CenterText = true
             };
             AssassinButton.Click += (o, e) =>
             {
@@ -209,8 +185,6 @@ namespace Client.MirScenes.Dialogs
                 Parent = this,
                 PressedIndex = 2440,
                 Sound = SoundList.ButtonA,
-                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.Archer),
-                CenterText = true
             };
             ArcherButton.Click += (o, e) =>
             {
@@ -371,7 +345,6 @@ namespace Client.MirScenes.Dialogs
             if (disposing)
             {
                 TitleLabel = null;
-                TitleTextLabel = null;
             }
 
             base.Dispose(disposing);
