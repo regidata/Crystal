@@ -1,217 +1,170 @@
-```yaml
 name: Build Crystal Latest With Database
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - master
-      - main
-    tags:
-      - "v*"
+workflow_dispatch:
+push:
+branches:
+- master
+- main
+tags:
+- "v*"
 
 permissions:
-  contents: write
+contents: write
 
 env:
-  DOTNET_VERSION: "8.0.x"
-  CONFIGURATION: "Release"
-  RUNTIME: "win-x64"
-  DATABASE_NAME: "Jev"
+DOTNET_VERSION: "8.0.x"
+CONFIGURATION: "Release"
+RUNTIME: "win-x64"
+DATABASE_NAME: "Jev"
 
 jobs:
-  build:
-    name: Build Crystal Client Server Tools
-    runs-on: windows-latest
+build:
+name: Build Crystal Client Server Tools
+runs-on: windows-latest
 
-    steps:
-      - name: Checkout Crystal source
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+```
+steps:
+  - name: Checkout Crystal source
+    uses: actions/checkout@v4
+    with:
+      fetch-depth: 0
 
-      - name: Checkout Crystal.Database
-        uses: actions/checkout@v4
-        with:
-          repository: Suprcode/Crystal.Database
-          path: Crystal.Database
-          fetch-depth: 1
+  - name: Checkout Crystal.Database
+    uses: actions/checkout@v4
+    with:
+      repository: Suprcode/Crystal.Database
+      path: Crystal.Database
+      fetch-depth: 1
 
-      - name: Setup .NET 8
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+  - name: Setup .NET 8
+    uses: actions/setup-dotnet@v4
+    with:
+      dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Show .NET info
-        shell: pwsh
-        run: |
-          dotnet --info
+  - name: Show .NET info
+    shell: pwsh
+    run: |
+      dotnet --info
 
-      - name: Restore projects
-        shell: pwsh
-        run: |
-          dotnet restore "Client/Client.csproj"
-          dotnet restore "Server.MirForms/Server.csproj"
-          dotnet restore "LibraryEditor/LibraryEditor.csproj"
-          dotnet restore "LibraryViewer/LibraryViewer.csproj"
-          dotnet restore "AutoPatcherAdmin/AutoPatcherAdmin.csproj"
+  - name: Restore projects
+    shell: pwsh
+    run: |
+      dotnet restore "Client/Client.csproj"
+      dotnet restore "Server.MirForms/Server.csproj"
+      dotnet restore "LibraryEditor/LibraryEditor.csproj"
+      dotnet restore "LibraryViewer/LibraryViewer.csproj"
+      dotnet restore "AutoPatcherAdmin/AutoPatcherAdmin.csproj"
 
-      - name: Publish Client
-        shell: pwsh
-        run: |
-          dotnet publish "Client/Client.csproj" `
-            -c "${{ env.CONFIGURATION }}" `
-            -r "${{ env.RUNTIME }}" `
-            --self-contained false `
-            -o "artifacts/Crystal-Client"
+  - name: Publish Client
+    shell: pwsh
+    run: |
+      dotnet publish "Client/Client.csproj" -c "${{ env.CONFIGURATION }}" -r "${{ env.RUNTIME }}" --self-contained false -o "artifacts/Crystal-Client"
 
-      - name: Publish Server
-        shell: pwsh
-        run: |
-          dotnet publish "Server.MirForms/Server.csproj" `
-            -c "${{ env.CONFIGURATION }}" `
-            -r "${{ env.RUNTIME }}" `
-            --self-contained false `
-            -o "artifacts/Crystal-Server"
+  - name: Publish Server
+    shell: pwsh
+    run: |
+      dotnet publish "Server.MirForms/Server.csproj" -c "${{ env.CONFIGURATION }}" -r "${{ env.RUNTIME }}" --self-contained false -o "artifacts/Crystal-Server"
 
-      - name: Publish LibraryEditor
-        shell: pwsh
-        run: |
-          dotnet publish "LibraryEditor/LibraryEditor.csproj" `
-            -c "${{ env.CONFIGURATION }}" `
-            -r "${{ env.RUNTIME }}" `
-            --self-contained false `
-            -o "artifacts/Crystal-Tools/LibraryEditor"
+  - name: Publish LibraryEditor
+    shell: pwsh
+    run: |
+      dotnet publish "LibraryEditor/LibraryEditor.csproj" -c "${{ env.CONFIGURATION }}" -r "${{ env.RUNTIME }}" --self-contained false -o "artifacts/Crystal-Tools/LibraryEditor"
 
-      - name: Publish LibraryViewer
-        shell: pwsh
-        run: |
-          dotnet publish "LibraryViewer/LibraryViewer.csproj" `
-            -c "${{ env.CONFIGURATION }}" `
-            -r "${{ env.RUNTIME }}" `
-            --self-contained false `
-            -o "artifacts/Crystal-Tools/LibraryViewer"
+  - name: Publish LibraryViewer
+    shell: pwsh
+    run: |
+      dotnet publish "LibraryViewer/LibraryViewer.csproj" -c "${{ env.CONFIGURATION }}" -r "${{ env.RUNTIME }}" --self-contained false -o "artifacts/Crystal-Tools/LibraryViewer"
 
-      - name: Publish AutoPatcherAdmin
-        shell: pwsh
-        run: |
-          dotnet publish "AutoPatcherAdmin/AutoPatcherAdmin.csproj" `
-            -c "${{ env.CONFIGURATION }}" `
-            -r "${{ env.RUNTIME }}" `
-            --self-contained false `
-            -o "artifacts/Crystal-Tools/AutoPatcherAdmin"
+  - name: Publish AutoPatcherAdmin
+    shell: pwsh
+    run: |
+      dotnet publish "AutoPatcherAdmin/AutoPatcherAdmin.csproj" -c "${{ env.CONFIGURATION }}" -r "${{ env.RUNTIME }}" --self-contained false -o "artifacts/Crystal-Tools/AutoPatcherAdmin"
 
-      - name: Copy Jev database into Server package
-        shell: pwsh
-        run: |
-          $databasePath = "Crystal.Database/${{ env.DATABASE_NAME }}"
+  - name: Copy Jev database into Server package
+    shell: pwsh
+    run: |
+      $databasePath = "Crystal.Database/${{ env.DATABASE_NAME }}"
 
-          if (!(Test-Path $databasePath)) {
-            Write-Error "Database folder not found: $databasePath"
-            exit 1
-          }
+      if (!(Test-Path $databasePath)) {
+        Write-Error "Database folder not found: $databasePath"
+        exit 1
+      }
 
-          Write-Host "Copying database from $databasePath into artifacts/Crystal-Server"
+      Copy-Item -Path "$databasePath/*" -Destination "artifacts/Crystal-Server" -Recurse -Force
 
-          Copy-Item `
-            -Path "$databasePath/*" `
-            -Destination "artifacts/Crystal-Server" `
-            -Recurse `
-            -Force
+      Write-Host "Server package after database copy:"
+      Get-ChildItem "artifacts/Crystal-Server" | Select-Object Name, Mode, Length
 
-          Write-Host "Server package after database copy:"
-          Get-ChildItem "artifacts/Crystal-Server" | Select-Object Name, Mode, Length
+  - name: Create run notes
+    shell: pwsh
+    run: |
+      $sha = "${{ github.sha }}".Substring(0, 7)
+      $date = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
-      - name: Create run notes
-        shell: pwsh
-        run: |
-          $sha = "${{ github.sha }}".Substring(0, 7)
-          $date = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+      $notes = @(
+        "Crystal latest build with database",
+        "Repository: ${{ github.repository }}",
+        "Branch/Tag: ${{ github.ref_name }}",
+        "Commit: ${{ github.sha }}",
+        "Build time: $date UTC",
+        "Runtime: ${{ env.RUNTIME }}",
+        "Configuration: ${{ env.CONFIGURATION }}",
+        "Database: ${{ env.DATABASE_NAME }}",
+        "",
+        "How to run locally:",
+        "",
+        "1. Extract the Server zip to D:\Crystal\Server",
+        "2. Extract the Client zip to D:\Crystal\Client",
+        "3. Run D:\Crystal\Server\Server.exe once",
+        "4. Copy D:\Crystal\Server\Map to D:\Crystal\Client\Maps",
+        "5. Open D:\Crystal\Client\Mir2Test.ini",
+        "6. Set network to 127.0.0.1 and port 7000",
+        "7. Start Server.exe",
+        "8. Start Client.exe"
+      )
 
-          @"
-          Crystal latest build with database
-          Repository: ${{ github.repository }}
-          Branch/Tag: ${{ github.ref_name }}
-          Commit: ${{ github.sha }}
-          Build time: $date UTC
-          Runtime: ${{ env.RUNTIME }}
-          Configuration: ${{ env.CONFIGURATION }}
-          Database: ${{ env.DATABASE_NAME }}
+      $notes | Out-File -Encoding UTF8 "artifacts/RUN_NOTES.txt"
 
-          How to run locally:
+      Copy-Item "artifacts/RUN_NOTES.txt" "artifacts/Crystal-Client/RUN_NOTES.txt" -Force
+      Copy-Item "artifacts/RUN_NOTES.txt" "artifacts/Crystal-Server/RUN_NOTES.txt" -Force
+      Copy-Item "artifacts/RUN_NOTES.txt" "artifacts/Crystal-Tools/RUN_NOTES.txt" -Force
 
-          1. Extract Crystal-Server-$sha.zip to D:\Crystal\Server
-          2. Extract Crystal-Client-$sha.zip to D:\Crystal\Client
-          3. Run D:\Crystal\Server\Server.exe once
-          4. If Server generates missing Configs, close it and run it again
-          5. Copy D:\Crystal\Server\Map to D:\Crystal\Client\Maps
-          6. Open D:\Crystal\Client\Mir2Test.ini
-          7. Set network to:
-             UseConfig=True
-             IPAddress=127.0.0.1
-             Port=7000
-          8. Enable launcher patch if client resources are missing:
-             Enabled=True
-             Host=https://mirfiles.com/resources/mir2/crystal/patch/
-          9. Start Server.exe
-          10. Start Client.exe
-          "@ | Out-File -Encoding UTF8 "artifacts/RUN_NOTES.txt"
+  - name: Zip artifacts
+    shell: pwsh
+    run: |
+      $sha = "${{ github.sha }}".Substring(0, 7)
 
-          Copy-Item "artifacts/RUN_NOTES.txt" "artifacts/Crystal-Client/RUN_NOTES.txt" -Force
-          Copy-Item "artifacts/RUN_NOTES.txt" "artifacts/Crystal-Server/RUN_NOTES.txt" -Force
-          Copy-Item "artifacts/RUN_NOTES.txt" "artifacts/Crystal-Tools/RUN_NOTES.txt" -Force
+      Compress-Archive -Path "artifacts/Crystal-Client/*" -DestinationPath "Crystal-Client-$sha.zip" -Force
+      Compress-Archive -Path "artifacts/Crystal-Server/*" -DestinationPath "Crystal-Server-With-${{ env.DATABASE_NAME }}-Database-$sha.zip" -Force
+      Compress-Archive -Path "artifacts/Crystal-Tools/*" -DestinationPath "Crystal-Tools-$sha.zip" -Force
 
-      - name: Zip artifacts
-        shell: pwsh
-        run: |
-          $sha = "${{ github.sha }}".Substring(0, 7)
+  - name: Upload Client artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: Crystal-Client-win-x64
+      path: Crystal-Client-*.zip
+      if-no-files-found: error
 
-          Compress-Archive `
-            -Path "artifacts/Crystal-Client/*" `
-            -DestinationPath "Crystal-Client-$sha.zip" `
-            -Force
+  - name: Upload Server artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: Crystal-Server-With-Jev-Database-win-x64
+      path: Crystal-Server-With-Jev-Database-*.zip
+      if-no-files-found: error
 
-          Compress-Archive `
-            -Path "artifacts/Crystal-Server/*" `
-            -DestinationPath "Crystal-Server-With-${{ env.DATABASE_NAME }}-Database-$sha.zip" `
-            -Force
+  - name: Upload Tools artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: Crystal-Tools-win-x64
+      path: Crystal-Tools-*.zip
+      if-no-files-found: error
 
-          Compress-Archive `
-            -Path "artifacts/Crystal-Tools/*" `
-            -DestinationPath "Crystal-Tools-$sha.zip" `
-            -Force
-
-      - name: Upload Client artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Crystal-Client-win-x64
-          path: Crystal-Client-*.zip
-          if-no-files-found: error
-
-      - name: Upload Server artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Crystal-Server-With-Jev-Database-win-x64
-          path: Crystal-Server-With-Jev-Database-*.zip
-          if-no-files-found: error
-
-      - name: Upload Tools artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Crystal-Tools-win-x64
-          path: Crystal-Tools-*.zip
-          if-no-files-found: error
-
-      - name: Create GitHub Release on tag
-        if: startsWith(github.ref, 'refs/tags/')
-        shell: pwsh
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release create "${{ github.ref_name }}" `
-            "Crystal-Client-*.zip" `
-            "Crystal-Server-With-${{ env.DATABASE_NAME }}-Database-*.zip" `
-            "Crystal-Tools-*.zip" `
-            --title "${{ github.ref_name }}" `
-            --notes "Auto build from commit ${{ github.sha }} with ${{ env.DATABASE_NAME }} database"
+  - name: Create GitHub Release on tag
+    if: startsWith(github.ref, 'refs/tags/')
+    shell: pwsh
+    env:
+      GH_TOKEN: ${{ github.token }}
+    run: |
+      gh release create "${{ github.ref_name }}" "Crystal-Client-*.zip" "Crystal-Server-With-${{ env.DATABASE_NAME }}-Database-*.zip" "Crystal-Tools-*.zip" --title "${{ github.ref_name }}" --notes "Auto build from commit ${{ github.sha }} with ${{ env.DATABASE_NAME }} database"
 ```
