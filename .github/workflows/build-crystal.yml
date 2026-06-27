@@ -46,10 +46,25 @@ jobs:
         run: |
           dotnet --info
 
-      - name: Restore solution
+      - name: Restore required projects only
         shell: pwsh
         run: |
-          dotnet restore "Legend of Mir.sln"
+          dotnet restore "Client/Client.csproj"
+          dotnet restore "Server.MirForms/Server.csproj"
+
+          $toolProjects = @(
+            "LibraryEditor/LibraryEditor.csproj",
+            "LibraryViewer/LibraryViewer.csproj",
+            "AutoPatcherAdmin/AutoPatcherAdmin.csproj"
+          )
+
+          foreach ($project in $toolProjects) {
+            if (Test-Path $project) {
+              dotnet restore $project
+            } else {
+              Write-Host "Skipping restore for missing project: $project"
+            }
+          }
 
       - name: Publish Client
         shell: pwsh
