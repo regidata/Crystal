@@ -10,6 +10,7 @@ namespace Client.MirScenes
     public class SelectScene : MirScene
     {
         public MirImageControl Background, Title;
+        public MirLabel TitleTextLabel;
         private NewCharacterDialog _character;
 
         public MirLabel ServerLabel;
@@ -45,6 +46,17 @@ namespace Client.MirScenes
                 Location = new Point(468, 20)
             };
 
+            TitleTextLabel = new MirLabel
+            {
+                AutoSize = false,
+                DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
+                Font = new Font(Settings.FontName, 10F, FontStyle.Bold),
+                Location = Title.Location,
+                Parent = this,
+                Size = Title.Size,
+                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.TitleSelect)
+            };
+
             ServerLabel = new MirLabel
             {
                 Location = new Point(432, 60),
@@ -65,7 +77,9 @@ namespace Client.MirScenes
                 Library = Libraries.Title,
                 Location = new Point(100 + (xPoint * 1) - (xPoint / 2) - 50, Settings.ScreenHeight - 32),
                 Parent = Background,
-                PressedIndex = 342
+                PressedIndex = 342,
+                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonStart),
+                CenterText = true
             };
             StartGameButton.Click += (o, e) => StartGame();
 
@@ -77,6 +91,8 @@ namespace Client.MirScenes
                 Location = new Point(100 + (xPoint * 2) - (xPoint / 2) - 50, Settings.ScreenHeight - 32),
                 Parent = Background,
                 PressedIndex = 345,
+                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonNewChar),
+                CenterText = true
             };
             NewCharacterButton.Click += (o, e) => OpenNewCharacterDialog();
 
@@ -87,7 +103,9 @@ namespace Client.MirScenes
                 Library = Libraries.Title,
                 Location = new Point(100 + (xPoint * 3) - (xPoint / 2) - 50, Settings.ScreenHeight - 32),
                 Parent = Background,
-                PressedIndex = 348
+                PressedIndex = 348,
+                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonEraseChar),
+                CenterText = true
             };
             DeleteCharacterButton.Click += (o, e) => DeleteCharacter();
 
@@ -99,7 +117,9 @@ namespace Client.MirScenes
                 Library = Libraries.Title,
                 Location = new Point(100 + (xPoint * 4) - (xPoint / 2) - 50, Settings.ScreenHeight - 32),
                 Parent = Background,
-                PressedIndex = 351
+                PressedIndex = 351,
+                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonCredits),
+                CenterText = true
             };
             CreditsButton.Click += (o, e) =>
             {
@@ -113,7 +133,9 @@ namespace Client.MirScenes
                 Library = Libraries.Title,
                 Location = new Point(100 + (xPoint * 5) - (xPoint / 2) - 50, Settings.ScreenHeight - 32),
                 Parent = Background,
-                PressedIndex = 354
+                PressedIndex = 354,
+                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonExit),
+                CenterText = true
             };
             ExitGame.Click += (o, e) => Program.Form.Close();
 
@@ -545,6 +567,7 @@ namespace Client.MirScenes
             if (disposing)
             {
                 Background = null;
+                TitleTextLabel = null;
                 _character = null;
 
                 ServerLabel = null;

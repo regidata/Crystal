@@ -48,6 +48,8 @@ namespace Client.MirControls
                 Location = new Point(60, 123),
                 Parent = this,
                 PressedIndex = 202,
+                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonOK),
+                CenterText = true
             };
 
             CancelButton = new MirButton
@@ -58,6 +60,8 @@ namespace Client.MirControls
                 Location = new Point(160, 123),
                 Parent = this,
                 PressedIndex = 205,
+                Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonCancel),
+                CenterText = true
             };
             CancelButton.Click += DisposeDialog;
         }

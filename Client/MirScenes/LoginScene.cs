@@ -323,6 +323,7 @@ namespace Client.MirScenes
         public sealed class LoginDialog : MirImageControl
         {
             public MirImageControl TitleLabel, AccountIDLabel, PassLabel;
+            public MirLabel TitleTextLabel, AccountIDTextLabel, PassTextLabel;
             public MirButton AccountButton, CloseButton, OKButton, PassButton, ViewKeyButton;
             public MirTextBox AccountIDTextBox, PasswordTextBox;
             private bool _accountIDValid, _passwordValid;
@@ -343,6 +344,17 @@ namespace Client.MirScenes
                     };
                 TitleLabel.Location = new Point((Size.Width - TitleLabel.Size.Width)/2, 12);
 
+                TitleTextLabel = new MirLabel
+                {
+                    AutoSize = false,
+                    DrawFormat = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter,
+                    Font = new Font(Settings.FontName, 10F, FontStyle.Bold),
+                    Location = TitleLabel.Location,
+                    Parent = this,
+                    Size = TitleLabel.Size,
+                    Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.TitleLogin)
+                };
+
                 AccountIDLabel = new MirImageControl
                     {
                         Index = 31,
@@ -351,6 +363,16 @@ namespace Client.MirScenes
                         Location = new Point(52, 83),
                     };
 
+                AccountIDTextLabel = new MirLabel
+                {
+                    AutoSize = false,
+                    DrawFormat = TextFormatFlags.Right | TextFormatFlags.VerticalCenter,
+                    Location = new Point(28, 83),
+                    Parent = this,
+                    Size = new Size(52, 18),
+                    Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.LabelAccountID)
+                };
+
                 PassLabel = new MirImageControl
                     {
                         Index = 32,
@@ -358,6 +380,16 @@ namespace Client.MirScenes
                         Parent = this,
                         Location = new Point(43, 105)
                     };
+
+                PassTextLabel = new MirLabel
+                {
+                    AutoSize = false,
+                    DrawFormat = TextFormatFlags.Right | TextFormatFlags.VerticalCenter,
+                    Location = new Point(28, 105),
+                    Parent = this,
+                    Size = new Size(52, 18),
+                    Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.LabelPassword)
+                };
 
                 OKButton = new MirButton
                     {
@@ -368,7 +400,9 @@ namespace Client.MirScenes
                         Library = Libraries.Title,
                         Location = new Point(227, 81),
                         Parent = this,
-                        PressedIndex = 322
+                        PressedIndex = 322,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonLogin),
+                        CenterText = true
                     };
                 OKButton.Click += (o, e) => Login();
 
@@ -380,6 +414,8 @@ namespace Client.MirScenes
                         Location = new Point(60, 163),
                         Parent = this,
                         PressedIndex = 325,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonNewAccount),
+                        CenterText = true
                     };
 
                 PassButton = new MirButton
@@ -390,6 +426,8 @@ namespace Client.MirScenes
                         Location = new Point(166, 163),
                         Parent = this,
                         PressedIndex = 328,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonChangePassword),
+                        CenterText = true
                     };
 
                 ViewKeyButton = new MirButton
@@ -400,6 +438,8 @@ namespace Client.MirScenes
                     Location = new Point(60, 189),
                     Parent = this,
                     PressedIndex = 334,
+                    Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonViewKey),
+                    CenterText = true
                 };
 
                 CloseButton = new MirButton
@@ -410,6 +450,8 @@ namespace Client.MirScenes
                         Location = new Point(166, 189),
                         Parent = this,
                         PressedIndex = 331,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonExit),
+                        CenterText = true
                     };
                 CloseButton.Click += (o, e) => Program.Form.Close();
 
@@ -535,6 +577,9 @@ namespace Client.MirScenes
                     TitleLabel = null;
                     AccountIDLabel = null;
                     PassLabel = null;
+                    TitleTextLabel = null;
+                    AccountIDTextLabel = null;
+                    PassTextLabel = null;
                     AccountButton = null;
                     CloseButton = null;
                     OKButton = null;
@@ -782,7 +827,9 @@ namespace Client.MirScenes
                     Library = Libraries.Title,
                     Location = new Point(409, 425),
                     Parent = this,
-                    PressedIndex = 205
+                    PressedIndex = 205,
+                    Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonCancel),
+                    CenterText = true
                 };
                 CancelButton.Click += (o, e) => Dispose();
 
@@ -795,6 +842,8 @@ namespace Client.MirScenes
                     Location = new Point(135, 425),
                     Parent = this,
                     PressedIndex = 202,
+                    Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonCreate),
+                    CenterText = true
                 };
                 OKButton.Click += (o, e) => CreateAccount();
 
@@ -1187,7 +1236,9 @@ namespace Client.MirScenes
                     Library = Libraries.Title,
                     Location = new Point(222, 236),
                     Parent = this,
-                    PressedIndex = 112
+                    PressedIndex = 112,
+                    Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonCancel),
+                    CenterText = true
                 };
                 CancelButton.Click += (o, e) => Dispose();
 
@@ -1200,6 +1251,8 @@ namespace Client.MirScenes
                     Location = new Point(80, 236),
                     Parent = this,
                     PressedIndex = 109,
+                    Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonOK),
+                    CenterText = true
                 };
                 OKButton.Click += (o, e) => ChangePassword();
 

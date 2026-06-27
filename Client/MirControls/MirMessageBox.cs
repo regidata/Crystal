@@ -48,6 +48,8 @@ namespace Client.MirControls
                         Location = new Point(360, 157),
                         Parent = this,
                         PressedIndex = 202,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonOK),
+                        CenterText = true
                     };
                     OKButton.Click += (o, e) => Dispose();
                     break;
@@ -60,6 +62,8 @@ namespace Client.MirControls
                         Location = new Point(260, 157),
                         Parent = this,
                         PressedIndex = 202,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonOK),
+                        CenterText = true
                     };
                     OKButton.Click += (o, e) => Dispose();
                     CancelButton = new MirButton
@@ -70,6 +74,8 @@ namespace Client.MirControls
                         Location = new Point(360, 157),
                         Parent = this,
                         PressedIndex = 205,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonCancel),
+                        CenterText = true
                     };
                     CancelButton.Click += (o, e) => Dispose();
                     break;
@@ -82,6 +88,8 @@ namespace Client.MirControls
                         Location = new Point(260, 157),
                         Parent = this,
                         PressedIndex = 208,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonYes),
+                        CenterText = true
                     };
                     YesButton.Click += (o, e) => Dispose();
                     NoButton = new MirButton
@@ -92,6 +100,8 @@ namespace Client.MirControls
                         Location = new Point(360, 157),
                         Parent = this,
                         PressedIndex = 212,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonNo),
+                        CenterText = true
                     };
                     NoButton.Click += (o, e) => Dispose();
                     break;
@@ -104,6 +114,8 @@ namespace Client.MirControls
                         Location = new Point(160, 157),
                         Parent = this,
                         PressedIndex = 208,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonYes),
+                        CenterText = true
                     };
                     YesButton.Click += (o, e) => Dispose();
                     NoButton = new MirButton
@@ -114,6 +126,8 @@ namespace Client.MirControls
                         Location = new Point(260, 157),
                         Parent = this,
                         PressedIndex = 212,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonNo),
+                        CenterText = true
                     };
                     NoButton.Click += (o, e) => Dispose();
                     CancelButton = new MirButton
@@ -124,6 +138,8 @@ namespace Client.MirControls
                         Location = new Point(360, 157),
                         Parent = this,
                         PressedIndex = 205,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonCancel),
+                        CenterText = true
                     };
                     CancelButton.Click += (o, e) => Dispose();
                     break;
@@ -136,6 +152,8 @@ namespace Client.MirControls
                         Location = new Point(360, 157),
                         Parent = this,
                         PressedIndex = 205,
+                        Text = GameLanguage.ClientTextMap.GetLocalization(ClientTextKeys.ButtonCancel),
+                        CenterText = true
                     };
                     CancelButton.Click += (o, e) => Dispose();
                     break;
